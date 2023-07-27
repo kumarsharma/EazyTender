@@ -15,6 +15,7 @@ struct SalesRefundPayoutView: View {
     @State private var searchText: String = ""
     @State private var isPickerVisible = false
     @State private var amountTitle: String = "Sale Amount"
+    @State private var selectedCustomerName: String = "Adam Elliot"
     
     private let customers = ["Customer A", "Customer B", "Customer C"]
     var filteredCustomers: [String] {
@@ -45,7 +46,6 @@ struct SalesRefundPayoutView: View {
                     amountTitle = "Payout Amount"
                 }
             })
-            
 
             VStack {
                 Text(amountTitle).foregroundColor(Color(hex: 0x00425A)).font(.headline)
@@ -58,32 +58,41 @@ struct SalesRefundPayoutView: View {
                     .background(Color(hex: 0xFEDEFF))
             }
             .padding()
-
-            Button(action: {
-                            isPickerVisible = true
-                        }) {
-                            Text("Select Customer")
-                                .padding()
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                        }
-                        .padding()
-                        .popover(isPresented: $isPickerVisible, content: {
-                            VStack {
-                                SearchBar(text: $searchText)
-                                List(filteredCustomers, id: \.self) { customer in
-                                    Button(action: {
-                                        selectedCustomer = customer
-                                        isPickerVisible = false
-                                    }) {
-                                        Text(customer)
+            
+            HStack {
+                
+                Text("Customer:").foregroundColor(Color(hex: 0x00425A)).font(.headline)
+                Text("\(selectedCustomerName)")
+                Button(action: {
+                                isPickerVisible = true
+                            }) {
+                                Text("Select Customer")
+                                    .padding()
+                                    .background(Color.blue)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                            }
+                            .padding()
+                            .popover(isPresented: $isPickerVisible, content: {
+                                VStack {
+                                    SearchBar(text: $searchText)
+                                    List(filteredCustomers, id: \.self) { customer in
+                                        Button(action: {
+                                            selectedCustomer = customer
+                                            isPickerVisible = false
+                                        }) {
+                                            Text(customer)
+                                        }
                                     }
                                 }
-                            }
-                            .frame(width: 200, height: 300)
-                            .padding()
-                        })
+                                .frame(
+                                    width:UIScreen.main.bounds.width,
+                                    height:UIScreen.main.bounds.height-150
+                                 )
+                                .padding()
+                            })
+            }
+
             
             CalculatorView(displayText: $calculatorDisplay, onAmountEntered: { newAmount in
                            amount = newAmount
