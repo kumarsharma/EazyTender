@@ -9,13 +9,14 @@ import SwiftUI
 
 struct SalesRefundPayoutView: View {
     @State private var selectedOption = 0
-    @State private var amount: String = ""
+    @State private var amount: Float = 0
     @State private var selectedCustomer: String = ""
     @State private var calculatorDisplay: String = ""
     @State private var searchText: String = ""
     @State private var isPickerVisible = false
     @State private var amountTitle: String = "Sale Amount"
     @State private var selectedCustomerName: String = "Adam Elliot"
+    @State private var val: Float = 0
     
     private let customers = ["Customer A", "Customer B", "Customer C"]
     var filteredCustomers: [String] {
@@ -47,9 +48,17 @@ struct SalesRefundPayoutView: View {
                 }
             })
 
+            let currencyFormatter: NumberFormatter = {
+              let formatter = NumberFormatter()
+              formatter.numberStyle = .currency
+              return formatter
+            }()
+            
+
             VStack {
+//                val = Float($amount)
                 Text(amountTitle).foregroundColor(Color(hex: 0x00425A)).font(.headline)
-                TextField("Enter amount", text: $amount)
+                TextField("Enter amount", value: $amount, formatter: currencyFormatter)
                     .keyboardType(.decimalPad)
                     .multilineTextAlignment(.center)
                     .font(.largeTitle)
@@ -95,8 +104,15 @@ struct SalesRefundPayoutView: View {
 
             
             CalculatorView(displayText: $calculatorDisplay, onAmountEntered: { newAmount in
-                           amount = newAmount
-                       })
+                
+                if let amt = Float(newAmount) {
+                    
+                    amount = amt
+                } else {
+                    
+                    amount = 0
+                }
+            })
             ScrollView(.horizontal, showsIndicators: true) {
             HStack(spacing: 20) {
                 Button("Cash") {
@@ -190,7 +206,11 @@ struct CalculatorView: View {
                             lastOpSelected = ""
                             displayText = ""
                         } else if buttonTitle == "<" {
-                            displayText = ""
+                            
+                            if displayText.count > 0 {
+                                
+                                displayText.removeLast()
+                            }
                         } else if buttonTitle == "." {
                             
                             if shouldInvalidateFirstNumber {
