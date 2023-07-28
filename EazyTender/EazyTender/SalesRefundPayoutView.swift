@@ -97,7 +97,7 @@ struct SalesRefundPayoutView: View {
             CalculatorView(displayText: $calculatorDisplay, onAmountEntered: { newAmount in
                            amount = newAmount
                        })
-            
+            ScrollView(.horizontal, showsIndicators: true) {
             HStack(spacing: 20) {
                 Button("Cash") {
                     // Add your logic for cash payment here
@@ -107,6 +107,7 @@ struct SalesRefundPayoutView: View {
                 .background(Color.blue)
                 .cornerRadius(10)
                 .fixedSize(horizontal: true, vertical: true)
+                .font(.largeTitle)
 
                 Button("Card") {
                     // Add your logic for card payment here
@@ -115,6 +116,26 @@ struct SalesRefundPayoutView: View {
                 .foregroundColor(.white)
                 .background(Color.green)
                 .cornerRadius(10)
+                .font(.largeTitle)
+                
+                Button("Credit") {
+                    // Add your logic for card payment here
+                }
+                .padding()
+                .foregroundColor(.white)
+                .background(Color.cyan)
+                .cornerRadius(10)
+                .font(.largeTitle)
+                
+                Button("Voucher") {
+                    // Add your logic for card payment here
+                }
+                .padding()
+                .foregroundColor(.white)
+                .background(Color.orange)
+                .cornerRadius(10)
+                .font(.largeTitle)
+            }
             }
             
             .padding()
